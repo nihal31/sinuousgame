@@ -15,26 +15,28 @@ cursor:crosshair;
 </style>
 
 <script>
+
+
+	
 	window.onload = function(){
+	var mx;
+	var my;
+	var blradius=8;
+	var life=3;
+	
+	
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
-	var mousex = 1;
-    var mousey = 1;
-	canvas.addEventListener('mousemove', function(evt) {getMousePos(canvas, evt);}, false);
-    function getMousePos(canvas, evt) {
-    var rect = canvas.getBoundingClientRect();
-    mousey= evt.clientY - rect.top;
-    mousex= evt.clientX - rect.left; }
+	canvas.addEventListener('mousemove', function(e) { mx=e.pageX; my=e.pageY;}, false);
 	
-    canvas.addEventListener('mousemove', function(evt) {getMousePos(canvas, evt);}, false);
-	
+    
 	var W = window.innerWidth;
 	var H = window.innerHeight;
 	canvas.width = W;
 	canvas.height = H;
-	var bluedot={x:mousex ,y: mousey, r:5};
 	var mp = 100; 
 	var particles = [];
+	var powerparticles=[];
 	
 	for(var i = 0; i < mp; i++)
 	{
@@ -46,47 +48,94 @@ cursor:crosshair;
 		})
 	}
 	
+		
 	function drawblue(){
-	ctx.fillStyle="rgba(0,0,255,0.8)";
-	ctx.beginPath();
-	ctx.moveTo(10,10);
-	ctx.arc(10,10,50,Math.PI*2, true);
-	ctx.fill();
+		ctx.fillStyle="rgba(0, 0, 255, 0.8)";
+		ctx.beginPath();
+		ctx.moveTo(mx, my);
+		ctx.arc(mx, my, blradius, 0, Math.PI*2, true);
+		ctx.fill();
+		
 	}
+	
+	function checkposition(){
+		var i;
+		for(i = 0; i < mp; i++)
+		{
+		var p = particles[i];
+		if(!(Math.abs(mx-p.x)<2&&Math.abs(my-p.y)<4))
+		{
+				continue;
+					
+		}
+		else break;		
+		}
+		if(i<mp)return true;
+		else return false;
+			
+		}
 	
 	function draw()
 	{ 	
-		drawblue();
+		
+		
 		ctx.clearRect(0, 0, W, H);
+		
+		
+		drawblue();
+		
 		ctx.fillStyle = "rgba(255, 0, 0, 0.8)";
 		ctx.beginPath();
+		
 		for(var i = 0; i < mp; i++)
 		{
 			var p = particles[i];
+			
 			ctx.moveTo(p.x, p.y);
+			
 			ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
+			
+			
 		}
+		
 		ctx.fill();
+		
+		
+		
+		if (checkposition())
+		{	
+			life--;
+			blradius+=2;
+			if(life<0)
+			alert("game over");
+			
+		   
+		}
+			
+				
+		
 		update();
 	}
 	
 	
-	var angle = 225;
+	var angle =225;
 	function update()
 	{
 	
 		for(var i = 0; i < mp; i++)
 		{
 			var p = particles[i];
-			p.y += Math.cos(angle) * 2;
-			p.x += Math.sin(angle) * 2;
+			p.y += Math.cos(angle) * 4;
+			p.x += Math.sin(angle) * 4;
+			
+			
 		}
-		/*for(var i = 0; i < mp; i++)
+		
+		
+		for(var i = 0; i < mp; i++)
 		{
 			var p = particles[i];
-			p.y += Math.cos(angle+p.d) + 1 + p.r/2;
-			p.x += Math.sin(angle) * 2;
-			
+					
 			
 			if(p.x > W+5 || p.x < -5 || p.y > H)
 			{
@@ -99,21 +148,22 @@ cursor:crosshair;
 					
 					if(Math.sin(angle) > 0)
 					{
-						
 						particles[i] = {x: -5, y: Math.random()*H, r: p.r, d: p.d};
 					}
 					else
 					{
-						
 						particles[i] = {x: W+5, y: Math.random()*H, r: p.r, d: p.d};
 					}
 				}
 			}
-		}*/
+		}
+		
+		
+		
 	}
 	
 	
-	setInterval(draw, 33);
+	setInterval(draw,33);
 }
 
 
@@ -131,7 +181,7 @@ cursor:crosshair;
 
 <body>
 
-<canvas id="canvas" ></canvas>}
+<canvas id="canvas" style='position:absolute'></canvas>}
 
 </body>
 
