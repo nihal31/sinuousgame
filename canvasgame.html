@@ -2,7 +2,15 @@
 
 <head>
 <style>
+* {margin: 0; padding: 0;}
 
+body {
+	
+	background: black;
+}
+canvas {
+	display: block;
+}
 
 
 
@@ -78,12 +86,12 @@ window.onload = function(){
 					//If the flake is exitting from the right
 					if(Math.sin(angle) > 0)
 					{
-						//Enter from the left
+						
 						particles[i] = {x: -5, y: Math.random()*H, r: p.r, d: p.d};
 					}
 					else
 					{
-						//Enter from the right
+						
 						particles[i] = {x: W+5, y: Math.random()*H, r: p.r, d: p.d};
 					}
 				}
@@ -91,7 +99,7 @@ window.onload = function(){
 		}
 	}
 	
-	//animation loop
+	
 	setInterval(draw, 33);
 }
 
@@ -108,9 +116,9 @@ window.onload = function(){
 
 
 
-<body onload="init();">
+<body>
 
-<canvas id=canvas" width="800" height="800" style="border:1px solid #000000;">your browser does not support html5 canvas </canvas>
+<canvas id="canvas"></canvas>}
 
 </body>
 
