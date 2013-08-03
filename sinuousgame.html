@@ -4,28 +4,38 @@
 * {margin: 0; padding: 0;}
 
 body {
-	
-	background: black;
+background: black;
 }
+
 canvas {
-	display: block;
+display: block;
+cursor:crosshair;
 }
+
 </style>
 
 <script>
 	window.onload = function(){
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
+	var mousex = 1;
+    var mousey = 1;
+	canvas.addEventListener('mousemove', function(evt) {getMousePos(canvas, evt);}, false);
+    function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    mousey= evt.clientY - rect.top;
+    mousex= evt.clientX - rect.left; }
 	
+    canvas.addEventListener('mousemove', function(evt) {getMousePos(canvas, evt);}, false);
 	
 	var W = window.innerWidth;
 	var H = window.innerHeight;
 	canvas.width = W;
 	canvas.height = H;
-	
-	
-	var mp = 40; 
+	var bluedot={x:mousex ,y: mousey, r:5};
+	var mp = 100; 
 	var particles = [];
+	
 	for(var i = 0; i < mp; i++)
 	{
 		particles.push({
@@ -37,14 +47,16 @@ canvas {
 	}
 	
 	function drawblue(){
-	
-	
-	
-	
+	ctx.fillStyle="rgba(0,0,255,0.8)";
+	ctx.beginPath();
+	ctx.moveTo(10,10);
+	ctx.arc(10,10,50,Math.PI*2, true);
+	ctx.fill();
 	}
 	
 	function draw()
-	{ 
+	{ 	
+		drawblue();
 		ctx.clearRect(0, 0, W, H);
 		ctx.fillStyle = "rgba(255, 0, 0, 0.8)";
 		ctx.beginPath();
@@ -59,27 +71,32 @@ canvas {
 	}
 	
 	
-	var angle = 45;
+	var angle = 225;
 	function update()
 	{
-		
+	
 		for(var i = 0; i < mp; i++)
 		{
 			var p = particles[i];
-			
+			p.y += Math.cos(angle) * 2;
+			p.x += Math.sin(angle) * 2;
+		}
+		/*for(var i = 0; i < mp; i++)
+		{
+			var p = particles[i];
 			p.y += Math.cos(angle+p.d) + 1 + p.r/2;
 			p.x += Math.sin(angle) * 2;
 			
 			
 			if(p.x > W+5 || p.x < -5 || p.y > H)
 			{
-				if(i%3 > 0) //66.67% of the flakes
+				if(i%3>0)
 				{
 					particles[i] = {x: Math.random()*W, y: -10, r: p.r, d: p.d};
 				}
 				else
 				{
-					//If the flake is exitting from the right
+					
 					if(Math.sin(angle) > 0)
 					{
 						
@@ -92,7 +109,7 @@ canvas {
 					}
 				}
 			}
-		}
+		}*/
 	}
 	
 	
@@ -114,7 +131,7 @@ canvas {
 
 <body>
 
-<canvas id="canvas" width="800" height="800"></canvas>}
+<canvas id="canvas" ></canvas>}
 
 </body>
 
