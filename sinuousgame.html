@@ -23,20 +23,44 @@ cursor:crosshair;
 	var my;
 	var blradius=8;
 	var life=3;
+	var tolerance=4;
+	var score=0;
+	var time=0;
+	//var powers=['sh','lifeup'];
 	
 	
 	var canvas = document.getElementById("canvas");
+	//var trail=[];
 	var ctx = canvas.getContext("2d");
+	document.getElementById("lives").innerHTML="Lives remaining : "+life;
 	canvas.addEventListener('mousemove', function(e) { mx=e.pageX; my=e.pageY;}, false);
 	
-    
+	/*if(trail.length>30)trail=null;
+	
+	trail.push({
+	'x':mx,
+	'y':my	
+	});*/
+	
+	/*for(var i=0;i<27;i+=2){
+	ctx.strokeStyle="rgba(0, 0, 255, 0.8)";
+	console.log(trail[i]);
+	var t=trail[i];
+	var tn=trail[i+2];
+	ctx.moveTo(t.x,t.y);
+	ctx.lineTo(tn.x,tn.y);
+	ctx.stroke();}*/
+	
+	  
 	var W = window.innerWidth;
 	var H = window.innerHeight;
 	canvas.width = W;
 	canvas.height = H;
-	var mp = 100; 
+	var mp = 100;
+	
+	
 	var particles = [];
-	var powerparticles=[];
+	
 	
 	for(var i = 0; i < mp; i++)
 	{
@@ -46,10 +70,29 @@ cursor:crosshair;
 			r: Math.random()*4+1,
 			d: Math.random()*mp 
 		})
+		
+		/*powerparticles.push({
+			x: Math.random()*W, 
+			y: Math.random()*H, 
+			r: Math.random()*4+1,
+			d: Math.random()*5 
+			p:powers[ Math.floor(Math.random()*2)]
+		})*/
+		
+		
+		
 	}
 	
 		
 	function drawblue(){
+		
+		if(life==2)
+		ctx.fillStyle="yellow";
+		else if(life==1)
+		ctx.fillStyle="orange";
+		else if(life==0)
+		ctx.fillStyle="violet";
+		else
 		ctx.fillStyle="rgba(0, 0, 255, 0.8)";
 		ctx.beginPath();
 		ctx.moveTo(mx, my);
@@ -63,7 +106,7 @@ cursor:crosshair;
 		for(i = 0; i < mp; i++)
 		{
 		var p = particles[i];
-		if(!(Math.abs(mx-p.x)<2&&Math.abs(my-p.y)<4))
+		if(!(Math.abs(mx-p.x)<tolerance&&Math.abs(my-p.y)<tolerance))
 		{
 				continue;
 					
@@ -78,7 +121,7 @@ cursor:crosshair;
 	function draw()
 	{ 	
 		
-		
+		document.getElementById("score").innerHTML="  Your score is "+score;
 		ctx.clearRect(0, 0, W, H);
 		
 		
@@ -96,18 +139,22 @@ cursor:crosshair;
 			ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
 			
 			
+			
 		}
-		
 		ctx.fill();
+		
 		
 		
 		
 		if (checkposition())
 		{	
 			life--;
-			blradius+=2;
+			document.getElementById("lives").innerHTML="Lives remaining : "+life;
+			
 			if(life<0)
-			alert("game over");
+			{alert("game over \n"+"Your Score is "+score);
+			life=3;
+			document.getElementById("lives").innerHTML="Lives remaining : "+life;}
 			
 		   
 		}
@@ -121,12 +168,12 @@ cursor:crosshair;
 	var angle =225;
 	function update()
 	{
-	
+		score+=2;
 		for(var i = 0; i < mp; i++)
 		{
 			var p = particles[i];
-			p.y += Math.cos(angle) * 4;
-			p.x += Math.sin(angle) * 4;
+			p.y += Math.cos(angle) * 8;
+			p.x += Math.sin(angle) * 8;
 			
 			
 		}
@@ -180,7 +227,8 @@ cursor:crosshair;
 
 
 <body>
-
+<span id="lives" style='color:white'></span>
+<span id="score" style='color:white'></span>
 <canvas id="canvas" style='position:absolute'></canvas>}
 
 </body>
